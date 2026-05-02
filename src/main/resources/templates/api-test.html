@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pruebas API Python</title>
+</head>
+<body>
+
+<h1>Pruebas de llamadas a la API Python</h1>
+
+<p>Desde esta pantalla se prueban llamadas correctas y llamadas que generan excepciones.</p>
+
+<h2>Archivos</h2>
+<a href="/api-test/archivo-ok">Leer archivo correctamente</a><br>
+<a href="/api-test/archivo-error">Simular error de archivo</a><br>
+
+<h2>Base de datos</h2>
+<a href="/api-test/db-ok">Conexión correcta a base de datos</a><br>
+<a href="/api-test/db-error">Simular error de base de datos</a><br>
+
+<h2>API externa Pokémon</h2>
+<a href="/api-test/pokemon-ok">Llamada correcta a PokéAPI</a><br>
+<a href="/api-test/pokemon-error">Simular error de PokéAPI</a><br>
+
+<hr>
+
+<h2>Respuesta recibida desde Flask</h2>
+<pre th:text="${respuesta}">Aquí aparecerá la respuesta</pre>
+
+<br>
+<a href="/">Volver al inicio</a>
+
+</body>
+</html>
