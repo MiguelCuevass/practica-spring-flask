@@ -5,13 +5,14 @@ services:
     env_file: ./.env
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD_DES
-      - MYSQL_DATABASE=$MYSQLDB_DATABASE_DES
+      - MYSQL_DATABASE=basicosd
     ports:
-      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT_DES
+      - $MYSQLDB_LOCAL_PORT:3306
     volumes:
       - db:/var/lib/mysql
     networks:
       - app-network
+
   postgres-db:
     image: postgres:12
     restart: always
@@ -21,7 +22,7 @@ services:
       POSTGRES_USER: $POSTGRES_USER_DES
       POSTGRES_PASSWORD: $POSTGRES_ROOT_PASSWORD_DES
     ports:
-      - $POSTGRES_LOCAL_PORT_DES:$POSTGRES_DOCKER_PORT_DES
+      - $POSTGRES_LOCAL_PORT_DES:5432
     volumes:
       - postgresdata:/var/lib/postgresql/data
     networks:
@@ -32,23 +33,35 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - app-network
+
+  python-api:
+    build: ./python-api
+    restart: on-failure
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres-db
+    networks:
+      - app-network
+
   webapp:
     depends_on:
       - mysqldb
     build: ./
     restart: on-failure
     env_file: ./.env
-
     ports:
-      - $SPRING_LOCAL_PORT_DES:$SPRING_DOCKER_PORT_DES
+      - $SPRING_LOCAL_PORT_DES:8080
     environment:
-		- SPRING_DATASOURCE_USERNAME=$MYSQLDB_USER_DES
-		- SPRING_DATASOURCE_PASSWORD=$MYSQLDB_ROOT_PASSWORD_DES
-		- SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
-		- SPRING_JPA_HIBERNATE_DDL_AUTO=update
-		- SPRING_JPA_SHOW_SQL=false
-		- SERVER_PORT=$SPRING_DOCKER_PORT_DES
-		- SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT_DES/$MYSQLDB_DATABASE_DES?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=$MYSQLDB_ROOT_PASSWORD_DES
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=false
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/basicosd?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     networks:
       - app-network
     extra_hosts:
@@ -60,9 +73,11 @@ services:
         target: /certificates
     stdin_open: true
     tty: true
+
 networks:
   app-network:
     driver: bridge
+
 volumes:
   db:
   postgresdata:
