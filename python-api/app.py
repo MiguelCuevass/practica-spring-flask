@@ -38,7 +38,7 @@ def archivo_error():
             "contenido": contenido
         }), 200
 
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         return jsonify({
             "estado": "ERROR",
             "tipo": "FileNotFoundError",
@@ -58,9 +58,10 @@ def db_ok():
     try:
         conexion = psycopg2.connect(
             host="postgres-db",
-            database="basicosd",
-            user="postgres",
-            password="postgres"
+            port=5432,
+            database="tmdb",
+            user="tm",
+            password="eneas"
         )
 
         cursor = conexion.cursor()
@@ -89,8 +90,9 @@ def db_error():
     try:
         conexion = psycopg2.connect(
             host="postgres-db",
+            port=5432,
             database="base_que_no_existe",
-            user="postgres",
+            user="tm",
             password="password_incorrecta"
         )
 
@@ -101,10 +103,10 @@ def db_error():
             "mensaje": "Esto no debería ejecutarse"
         }), 200
 
-    except Exception as e:
+    except Exception:
         return jsonify({
             "estado": "ERROR",
-            "tipo": type(e).__name__,
+            "tipo": "OperationalError",
             "mensaje": "Error simulado al acceder a la base de datos"
         }), 500
 
@@ -112,13 +114,17 @@ def db_error():
 @app.route("/api/pokemon/ok")
 def pokemon_ok():
     try:
-        respuesta = requests.get("https://pokeapi.co/api/v2/pokemon/pikachu", timeout=5)
+        respuesta = requests.get(
+            "https://pokeapi.co/api/v2/pokemon/pikachu",
+            timeout=5
+        )
         respuesta.raise_for_status()
 
         datos = respuesta.json()
 
         return jsonify({
             "estado": "OK",
+            "mensaje": "Llamada correcta a la API externa",
             "nombre": datos["name"],
             "id": datos["id"]
         }), 200
@@ -134,12 +140,15 @@ def pokemon_ok():
 @app.route("/api/pokemon/error")
 def pokemon_error():
     try:
-        respuesta = requests.get("https://pokeapi.co/api/v2/pokemon/noexiste123456", timeout=5)
+        respuesta = requests.get(
+            "https://pokeapi.co/api/v2/pokemon/noexiste123456",
+            timeout=5
+        )
         respuesta.raise_for_status()
 
         return jsonify(respuesta.json()), 200
 
-    except requests.exceptions.HTTPError as e:
+    except requests.exceptions.HTTPError:
         return jsonify({
             "estado": "ERROR",
             "tipo": "HTTPError",
@@ -152,6 +161,21 @@ def pokemon_error():
             "tipo": type(e).__name__,
             "mensaje": "Error general al llamar a la API externa"
         }), 500
+
+
+@app.route("/")
+def index():
+    return jsonify({
+        "mensaje": "API Flask funcionando correctamente",
+        "endpoints": [
+            "/api/archivo/ok",
+            "/api/archivo/error",
+            "/api/db/ok",
+            "/api/db/error",
+            "/api/pokemon/ok",
+            "/api/pokemon/error"
+        ]
+    }), 200
 
 
 if __name__ == "__main__":

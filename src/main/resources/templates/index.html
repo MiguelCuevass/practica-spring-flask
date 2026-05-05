@@ -1,8 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema Spring Boot y API Flask</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contenedor {
+            max-width: 900px;
+            margin: 60px auto;
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #1f2933;
+        }
+
+        p {
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 18px;
+            background-color: #0d6efd;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .boton:hover {
+            background-color: #084298;
+        }
+
+        .info {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #eef4ff;
+            border-left: 4px solid #0d6efd;
+        }
+    </style>
+</head>
 <body>
 
-<a href="/api-test">Ir a pruebas de API Python</a>
+<div class="contenedor">
+    <h1>Sistema con Spring Boot y API Flask</h1>
+
+    <p>
+        Aplicación desarrollada para probar la integración entre un frontend con
+        Thymeleaf, un backend con Spring Boot y una API externa implementada en Python con Flask.
+    </p>
+
+    <p>
+        El objetivo principal es simular distintos tipos de errores y comprobar
+        cómo se gestionan desde la aplicación web.
+    </p>
+
+    <a class="boton" href="/api-test">Ir a pruebas de API Python</a>
+
+    <div class="info">
+        <strong>Nota:</strong> para acceder a las pruebas es necesario iniciar sesión
+        con un usuario almacenado en base de datos.
+    </div>
+</div>
 
 </body>
 </html>

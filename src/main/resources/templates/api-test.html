@@ -3,37 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <title>Pruebas API Python</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contenedor {
+            max-width: 1000px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #1f2933;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #243b53;
+        }
+
+        p {
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .tarjeta {
+            border: 1px solid #d9e2ec;
+            border-radius: 8px;
+            padding: 18px;
+            background-color: #ffffff;
+        }
+
+        .tarjeta h3 {
+            margin-top: 0;
+            color: #102a43;
+        }
+
+        .boton {
+            display: block;
+            margin-top: 10px;
+            padding: 10px 14px;
+            background-color: #0d6efd;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 6px;
+        }
+
+        .boton.secundario {
+            background-color: #dc3545;
+        }
+
+        .boton:hover {
+            opacity: 0.9;
+        }
+
+        .respuesta {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #111827;
+            color: #d1d5db;
+            border-radius: 8px;
+            overflow-x: auto;
+            min-height: 80px;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-top: 25px;
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        .volver:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 800px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<h1>Pruebas de llamadas a la API Python</h1>
+<div class="contenedor">
+    <h1>Pruebas de llamadas a la API Python</h1>
 
-<p>
-    Esta pantalla permite probar llamadas correctas y llamadas con errores
-    contra una API desarrollada en Python con Flask.
-</p>
+    <p>
+        Esta pantalla permite realizar llamadas desde Spring Boot hacia una API
+        desarrollada en Python con Flask. Se incluyen casos correctos y casos con
+        errores para comprobar el tratamiento de excepciones.
+    </p>
 
-<h2>Pruebas con archivos</h2>
-<a href="/api-test/archivo-ok">Leer archivo correctamente</a><br>
-<a href="/api-test/archivo-error">Simular error de lectura de archivo</a><br>
+    <div class="grid">
+        <div class="tarjeta">
+            <h3>Archivos</h3>
+            <p>Pruebas relacionadas con lectura de ficheros desde la API Flask.</p>
+            <a class="boton" href="/api-test/archivo-ok">Lectura correcta</a>
+            <a class="boton secundario" href="/api-test/archivo-error">Error de archivo</a>
+        </div>
 
-<h2>Pruebas con base de datos</h2>
-<a href="/api-test/db-ok">Conexión correcta a base de datos</a><br>
-<a href="/api-test/db-error">Simular error de base de datos</a><br>
+        <div class="tarjeta">
+            <h3>Base de datos</h3>
+            <p>Pruebas de conexión correcta y fallo simulado al acceder a base de datos.</p>
+            <a class="boton" href="/api-test/db-ok">Conexión correcta</a>
+            <a class="boton secundario" href="/api-test/db-error">Error de base de datos</a>
+        </div>
 
-<h2>Pruebas con API externa Pokémon</h2>
-<a href="/api-test/pokemon-ok">Llamada correcta a PokéAPI</a><br>
-<a href="/api-test/pokemon-error">Simular error en PokéAPI</a><br>
+        <div class="tarjeta">
+            <h3>API externa</h3>
+            <p>Pruebas de llamada a una API externa usando la API pública de Pokémon.</p>
+            <a class="boton" href="/api-test/pokemon-ok">Llamada correcta</a>
+            <a class="boton secundario" href="/api-test/pokemon-error">Error API externa</a>
+        </div>
+    </div>
 
-<hr>
+    <h2>Respuesta recibida desde Flask</h2>
 
-<h2>Respuesta recibida desde Flask</h2>
+    <pre class="respuesta" th:text="${respuesta}">Todavía no se ha realizado ninguna llamada.</pre>
 
-<pre th:text="${respuesta}">Aquí aparecerá la respuesta de la API</pre>
-
-<br>
-
-<a href="/">Volver a la página principal</a>
+    <a class="volver" href="/">Volver a la página principal</a>
+</div>
 
 </body>
 </html>
