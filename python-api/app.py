@@ -93,24 +93,35 @@ def db_error():
             port=5432,
             database="base_que_no_existe",
             user="tm",
-            password="password_incorrecta"
+            password="password_incorrecta",
+            connect_timeout=3
         )
 
         conexion.close()
 
         return jsonify({
-            "estado": "OK",
-            "mensaje": "Esto no debería ejecutarse"
+            "ok": True,
+            "message": "Esto no debería ejecutarse"
         }), 200
 
-    except Exception:
+    except psycopg2.OperationalError as e:
         return jsonify({
-            "estado": "ERROR",
-            "tipo": "OperationalError",
-            "mensaje": "Error simulado al acceder a la base de datos"
+            "ok": False,
+            "critical": False,
+            "errorType": "DB_CONNECTION_ERROR",
+            "userMessage": "No se puede conectar con la base de datos.",
+            "technicalMessage": str(e)
         }), 500
 
-
+    except Exception as e:
+        return jsonify({
+            "ok": False,
+            "critical": True,
+            "errorType": type(e).__name__,
+            "userMessage": "Se ha producido un error inesperado al acceder a la base de datos.",
+            "technicalMessage": str(e)
+        }), 500
+        
 @app.route("/api/pokemon/ok")
 def pokemon_ok():
     try:
